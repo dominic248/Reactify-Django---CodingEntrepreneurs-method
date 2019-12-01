@@ -18,20 +18,21 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
-from rest_framework_jwt.views import obtain_jwt_token
+from core.api.views import ConfirmEmailView
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('token-auth/', obtain_jwt_token),
-    path('api/core/', include('core.api.urls')),
-
+    path('admin/', admin.site.urls),  
     path('', TemplateView.as_view(template_name='react.html')),
+    path('api-auth/', include('rest_framework.urls')),
+    # path('accounts/password/reset/key/<slug>/', capture_url, name='password_reset_confirm_custom'),
+    path('accounts/', include('allauth.urls')),
+    path('rest-auth/', include('rest_auth.urls')),
+    path('rest-auth/registration/account-confirm-email/<key>/', ConfirmEmailView.as_view(),name="custom-email-confirm-api"),
+    path('rest-auth/registration/', include('rest_auth.registration.urls')),
+    path('api/user/', include('core.api.urls',namespace='core-api')),
 ]
-from django.urls import path, include
-
-
-    
+   
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

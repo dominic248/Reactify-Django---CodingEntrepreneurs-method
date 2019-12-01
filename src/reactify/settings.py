@@ -37,12 +37,45 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
+    'django.contrib.sites', 
     'corsheaders',
     'crispy_forms',
+    'allauth', 
+    'allauth.account',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
+    'rest_auth.registration',
     'core',
     
 ]
+AUTH_PROFILE_MODULE = 'core.profile'
+SITE_ID = 0
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 100
+
+# LOGIN_REDIRECT_URL = '/post/'
+# LOGOUT_REDIRECT_URL='account_login'
+# ACCOUNT_LOGOUT_REDIRECT_URL = 'account_login'
+
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
+ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = False
+ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1  # 1 day
+ACCOUNT_UNIQUE_EMAIL = True
+SOCIALACCOUNT_AUTO_SIGNUP = False
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.AllowAllUsersModelBackend',
+    'django.contrib.auth.backends.AllowAllUsersRemoteUserBackend',
+]
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # One month (defined in seconds)
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -151,7 +184,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':(
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
@@ -159,15 +191,27 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     )
 }
-JWT_AUTH = {
-    'JWT_RESPONSE_PAYLOAD_HANDLER': 'reactify.utils.my_jwt_response_handler'
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_LOGOUT_ON_GET = True
+# ACCOUNT_AUTHENTICATION_METHOD = ('username' | 'email') # (="username" | "email" | "username_email)
+EMAIL_VERIFICATION = 'mandatory'
+REST_AUTH_SERIALIZERS = {
+    'LOGIN_SERIALIZER': 'core.api.serializers.LoginSerializer',
+    'PASSWORD_RESET_SERIALIZER': 'core.api.serializers.PasswordResetSerializer',
+    'PASSWORD_RESET_CONFIRM_SERIALIZER': 'core.api.serializers.PasswordResetConfirmSerializer',
 }
+# REST_AUTH_REGISTER_SERIALIZERS={
+#     'REGISTER_SERIALIZER ': 'rest_auth.registration.serializers.RegisterSerializer',
+# }
+
 
 # EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # mail service smtp
 EMAIL_HOST_USER = 'dms24081999@gmail.com'  # email id
-EMAIL_HOST_PASSWORD = 'fsawkexebivuyccd'  # password
+EMAIL_HOST_PASSWORD = 'fjkhladauujxjiud'  # password
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
