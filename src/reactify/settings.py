@@ -37,16 +37,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'rest_framework',
     'corsheaders',
     'crispy_forms',
-    'rest_framework',
+    'core',
+    
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware', # Note that this needs to be placed above CommonMiddleware
+    'django.middleware.common.CommonMiddleware', # This should already exist
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -134,11 +136,12 @@ STATICFILES_FINDERS = (
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static-cdn-local')
 
 
-CORS_URLS_REGEX = r'^/api.*'
+# CORS_URLS_REGEX = r'^/api.*'
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = (
     # '*',
     'https://localhost:8000',
+    'https://localhost:3000',
 )
 
 MEDIA_URL = '/media/'
@@ -147,9 +150,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES':(
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     )
+}
+JWT_AUTH = {
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'reactify.utils.my_jwt_response_handler'
 }
 
 # EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'
