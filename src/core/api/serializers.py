@@ -23,6 +23,7 @@ from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
 from allauth.account.utils import url_str_to_user_pk
 from allauth.account.forms import default_token_generator
 from allauth.account.utils import send_email_confirmation
+from rest_auth.models import TokenModel
 User=get_user_model()
 
 class LoginSerializer(Serializer):
@@ -77,6 +78,18 @@ class LoginSerializer(Serializer):
                     raise ValidationError(_('E-mail is not verified. Verification Mail has been resent to your E-mail!'))
         attrs['user'] = user
         return attrs
+
+class TokenSerializer(ModelSerializer):
+    """
+    Serializer for Token model.
+    """
+    session_key = SerializerMethodField('get_session_key')
+    def get_session_key(self,attrs):
+        return self.context.get("request").session.session_key
+
+    class Meta:
+        model = TokenModel
+        fields = ('key','session_key')
 
 class PasswordResetSerializer(Serializer):
     """

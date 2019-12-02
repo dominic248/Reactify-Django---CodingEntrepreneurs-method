@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'rest_auth.registration',
+    "sslserver",
     'core',
     
 ]
@@ -78,10 +79,12 @@ SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # One month (defined in seconds)
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware', # Note that this needs to be placed above CommonMiddleware
+     # Note that this needs to be placed above CommonMiddleware
     'django.middleware.common.CommonMiddleware', # This should already exist
+    'corsheaders.middleware.CorsPostCsrfMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -168,14 +171,20 @@ STATICFILES_FINDERS = (
 )
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static-cdn-local')
 
-
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
 # CORS_URLS_REGEX = r'^/api.*'
 CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_WHITELIST = (
-    # '*',
-    'https://localhost:8000',
-    'https://localhost:3000',
-)
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = [ 
+    'http://localhost:8000', 
+    'http://127.0.0.1:8000',
+    'http://localhost:3000', 
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1.xip.io:3000',
+    'http://192.168.0.100:3000'
+]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
@@ -184,11 +193,15 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':(
+        
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        # 
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     )
 }
 
@@ -199,6 +212,7 @@ ACCOUNT_LOGOUT_ON_GET = True
 EMAIL_VERIFICATION = 'mandatory'
 REST_AUTH_SERIALIZERS = {
     'LOGIN_SERIALIZER': 'core.api.serializers.LoginSerializer',
+    'TOKEN_SERIALIZER': 'core.api.serializers.TokenSerializer',
     'PASSWORD_RESET_SERIALIZER': 'core.api.serializers.PasswordResetSerializer',
     'PASSWORD_RESET_CONFIRM_SERIALIZER': 'core.api.serializers.PasswordResetConfirmSerializer',
 }
