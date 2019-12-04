@@ -38,18 +38,21 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites', 
-    'corsheaders',
     'crispy_forms',
-    'allauth', 
-    'allauth.account',
+    "sslserver",
+    'corsheaders', 
+    'oauth2_provider',
     'rest_framework',
     'rest_framework.authtoken',
+    'allauth', 
+    'allauth.account',
     'rest_auth',
     'rest_auth.registration',
-    "sslserver",
     'core',
     
 ]
+
+SITE_ID = 0
 
 # SECURE_SSL_REDIRECT = False
 # SESSION_COOKIE_SECURE = False
@@ -58,10 +61,8 @@ SESSION_SAVE_EVERY_REQUEST =True
 SESSION_COOKIE_AGE=1209
 
 AUTH_PROFILE_MODULE = 'core.profile'
-SITE_ID = 0
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-
 ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 100
 
 # LOGIN_REDIRECT_URL = '/post/'
@@ -196,20 +197,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES':(
-        
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-        # 
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    )
-}
-
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_LOGOUT_ON_GET = True
@@ -224,6 +211,27 @@ REST_AUTH_SERIALIZERS = {
 # REST_AUTH_REGISTER_SERIALIZERS={
 #     'REGISTER_SERIALIZER ': 'rest_auth.registration.serializers.RegisterSerializer',
 # }
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES':(
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        # 
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    )
+}
+
+ACCESS_TOKEN_EXPIRE_SECONDS=315569520
+OAUTH2_PROVIDER = {
+    # this is the list of available scopes
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'},
+    'ACCESS_TOKEN_EXPIRE_SECONDS': 315569520,
+}
+
 
 
 # EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'

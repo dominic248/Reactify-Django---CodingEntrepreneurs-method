@@ -97,7 +97,7 @@ class CurrentUserAPIView(APIView):
         serializer = UserDetailSerializer(request.user)
         newdict={"sessionkey":request.session.session_key}
         newdict.update(serializer.data)
-        return Response(newdict)
+        return Response(serializer.data)
 
 
 class UserListAPIView(ListAPIView):

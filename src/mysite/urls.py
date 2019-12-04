@@ -24,6 +24,7 @@ from core.api.views import ConfirmEmailView
 urlpatterns = [
     path('admin/', admin.site.urls),  
     path('', TemplateView.as_view(template_name='react.html')),
+    path('oauth2/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     path('api-auth/', include('rest_framework.urls')),
     # path('accounts/password/reset/key/<slug>/', capture_url, name='password_reset_confirm_custom'),
     path('accounts/', include('allauth.urls')),
