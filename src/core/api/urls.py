@@ -9,6 +9,7 @@ from .views import (
     FollowRemoveAPIView,
     FollowUnfollowAPIView,
     GoogleLogin,
+    DeleteAllUnexpiredSessionsForUser
 
 )
 
@@ -16,6 +17,7 @@ app_name = 'core-api'
 
 urlpatterns = [
     path('', UserListAPIView.as_view(),name='list-user-api'),
+    path('sessions/all/delete/', DeleteAllUnexpiredSessionsForUser.as_view(),name='del'),
     path('current/', CurrentUserAPIView.as_view(),name='current-user-api'),
     # path('create/', UserCreateAPIView.as_view(),name='create-user-api'),
     # path('login/', UserLoginAPIView.as_view(),name='login-user-api'),

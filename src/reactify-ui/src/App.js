@@ -32,8 +32,8 @@ class App extends React.Component{
       withCredentials:true
     })
     .then(function (response) {
-      console.log(response.data.key)
-      console.log(response.headers);  
+      console.log(response.data)
+      console.log(response);  
     })
     .catch(function (error) {
       console.log(error.response.data)

@@ -43,6 +43,9 @@ from rest_auth.registration.views import SocialConnectView
 # from posts.api.serializers import PostDetailSerializer
 # from posts.api.pagination import StandardResultPagination
 # from posts.models import Post
+from django.utils import timezone
+from django.contrib.sessions.models import Session
+import datetime
 
 class GoogleLogin(SocialConnectView):
     adapter_class = GoogleOAuth2Adapter
@@ -53,9 +56,12 @@ class ConfirmEmailView(APIView):
 
     def get(self, *args, **kwargs):
         self.object = confirmation = self.get_object()
-        confirmation.confirm(self.request)
+        try:
+            confirmation.confirm(self.request)
+            return Response({"details":"E-mail ID registered successfully!"})
+        except:
         # A React Router Route will handle the failure scenario
-        return HttpResponseRedirect('/')
+            return Response({"details":"Failed to register E-mail ID. Invalid Link!"})
 
     def get_object(self, queryset=None):
         key = self.kwargs['key']
@@ -67,7 +73,7 @@ class ConfirmEmailView(APIView):
                 email_confirmation = queryset.get(key=key.lower())
             except EmailConfirmation.DoesNotExist:
                 # A React Router Route will handle the failure scenario
-                return HttpResponseRedirect('/')
+                return Response({"details":"Failed to register E-mail ID. An error occured!"})
         return email_confirmation
 
     def get_queryset(self):
@@ -75,6 +81,15 @@ class ConfirmEmailView(APIView):
         qs = qs.select_related("email_address__user")
         return qs
 
+    
+class DeleteAllUnexpiredSessionsForUser(APIView):
+    def get(self, request):
+        unexpired_sessions = Session.objects.filter(expire_date__gte=timezone.now())
+        [
+            session.delete() for session in unexpired_sessions
+            if str(request.user.id) == session.get_decoded().get('_auth_user_id')
+        ]
+        return Response({"details":"Successfully deleted all existing sessions!"})
 
 
 class CurrentUserAPIView(APIView):
