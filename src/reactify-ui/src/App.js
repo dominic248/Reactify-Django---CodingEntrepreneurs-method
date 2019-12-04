@@ -20,7 +20,7 @@ import axios from 'axios';
 // }
 class App extends React.Component{
   //some code
-  componentDidMount(){
+  componentWillMount(){
     axios.post('http://127.0.0.1:8000/rest-auth/login/',{
         username: 'dms',
         password: '24081999'

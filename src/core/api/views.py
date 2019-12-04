@@ -102,7 +102,7 @@ class CurrentUserAPIView(APIView):
 
 class UserListAPIView(ListAPIView):
     serializer_class=UserDetailSerializer
-
+    permission_classes = [AllowAny]
     def get_queryset(self):
         qs=User.objects.all()
         query=self.request.GET.get('s')

@@ -80,6 +80,8 @@ SOCIALACCOUNT_AUTO_SIGNUP = False
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.AllowAllUsersModelBackend',
     'django.contrib.auth.backends.AllowAllUsersRemoteUserBackend',
+    'django.contrib.auth.backends.ModelBackend', 
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
