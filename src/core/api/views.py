@@ -84,12 +84,15 @@ class ConfirmEmailView(APIView):
     
 class DeleteAllUnexpiredSessionsForUser(APIView):
     def get(self, request):
-        unexpired_sessions = Session.objects.filter(expire_date__gte=timezone.now())
-        [
-            session.delete() for session in unexpired_sessions
-            if str(request.user.id) == session.get_decoded().get('_auth_user_id')
-        ]
-        return Response({"details":"Successfully deleted all existing sessions!"})
+        try:
+            unexpired_sessions = Session.objects.filter(expire_date__gte=timezone.now())
+            [
+                session.delete() for session in unexpired_sessions
+                if str(request.user.id) == session.get_decoded().get('_auth_user_id')
+            ] 
+        except:
+            return Response({"detail":"Error!"})
+        return Response({"detail":"Successfully deleted all existing sessions!"})
 
 
 class CurrentUserAPIView(APIView):

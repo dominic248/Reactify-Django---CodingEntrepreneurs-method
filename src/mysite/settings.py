@@ -57,8 +57,9 @@ SITE_ID = 0
 # SECURE_SSL_REDIRECT = False
 # SESSION_COOKIE_SECURE = False
 # CSRF_COOKIE_SECURE = False
-SESSION_SAVE_EVERY_REQUEST =True
+# SESSION_SAVE_EVERY_REQUEST =True
 SESSION_COOKIE_AGE=1209
+SESSION_CACHE_ALIAS = "default"
 
 AUTH_PROFILE_MODULE = 'core.profile'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -89,10 +90,12 @@ SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # One month (defined in seconds)
 
 
 MIDDLEWARE = [
+    
     'corsheaders.middleware.CorsMiddleware',
     'corsheaders.middleware.CorsPostCsrfMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # 'mysite.middleware.DiscardSessionForAPIMiddleware',
      # Note that this needs to be placed above CommonMiddleware
     'django.middleware.common.CommonMiddleware', # This should already exist 
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -245,5 +248,4 @@ EMAIL_HOST_USER = 'dms24081999@gmail.com'  # email id
 EMAIL_HOST_PASSWORD = 'fjkhladauujxjiud'  # password
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-
 
