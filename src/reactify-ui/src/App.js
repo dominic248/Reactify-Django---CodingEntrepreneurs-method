@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import logo from './static/img/logo.svg';
+import logo from './static/media/logo.svg';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 // class App extends React.Component {
@@ -19,26 +19,75 @@ import axios from 'axios';
 //   }
 // }
 class App extends React.Component{
-  //some code
-  componentWillMount(){
-    axios.post('http://127.0.0.1:8000/rest-auth/login/',{
-        username: 'dms',
-        password: '24081999'
-    },{
-      headers: {
-          'Content-Type': 'application/json',
-      }
-    },{
-      withCredentials:true
-    })
-    .then(function (response) {
-      console.log(response.data)
-      console.log(response);  
-    })
-    .catch(function (error) {
-      console.log(error.response.data)
-    });
+  constructor(props){
+    super(props)
+    this.state={
+      isAuthenticated:false,
+      session_id:'undefined'
+    }
+    
   }
+  
+  async componentDidMount(){
+    var auth=false;
+    var sessioncookie=Cookies.get()
+    console.log(sessioncookie.session_id);
+    if(sessioncookie.session_id!==undefined){
+      Cookies.set('session_id', sessioncookie.session_id)
+      Cookies.set('sessionid', sessioncookie.session_id)
+      // 
+      
+      await axios.get('http://dms.com:8000/api/user/current/',{
+        headers: {
+            'Content-Type': 'application/json',
+            // 'Cookie': 'sessionid='+sessioncookie.session_id
+          }
+        },{
+          withCredentials:true
+        })
+        .then(response => {
+          console.log("Response data: ",response.data);
+          Cookies.set('session_id', sessioncookie.session_id, { expires: 7 })
+          Cookies.set('sessionid', sessioncookie.session_id, { expires: 7 })
+          auth=true
+        })
+        .catch(error => {
+          console.log(error.response.data)
+          auth=false
+      })
+      await this.setState({isAuthenticated:auth})
+    }else{
+      await this.setState({isAuthenticated:false})
+    }
+    console.log(this.state.isAuthenticated)
+    if(!this.state.isAuthenticated){
+      await axios.post('http://dms.com:8000/rest-auth/login/',{
+          username: 'dms',
+          password: '24081999'
+      },{
+        headers: {
+            'Content-Type': 'application/json',
+        }
+      },{
+        withCredentials:true
+      })
+      .then(response => {
+        // response=JSON.stringify(response)
+        console.log(response);  
+        Cookies.set('session_id', response.data.session_key, { expires: 7 });
+        Cookies.set('sessionid', response.data.session_key, { expires: 7 })
+        auth=true
+        var sessioncookie=Cookies.get();
+        console.log("Cookies after login: ",sessioncookie);
+      })
+      .catch(error => {
+        console.log(error.response.data)
+        auth=false
+      })
+      await this.setState({isAuthenticated:auth})
+    }
+  }
+
   render() {
     return (
       <div className="App">
@@ -53,4 +102,5 @@ class App extends React.Component{
     );
   }
 }
+
 export default App;

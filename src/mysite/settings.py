@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders', 
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,8 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites', 
     'crispy_forms',
-    "sslserver",
-    'corsheaders', 
+    'sslserver',
     'oauth2_provider',
     'rest_framework',
     'rest_framework.authtoken',
@@ -90,11 +90,11 @@ SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # One month (defined in seconds)
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsPostCsrfMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
      # Note that this needs to be placed above CommonMiddleware
-    'django.middleware.common.CommonMiddleware', # This should already exist
-    'corsheaders.middleware.CorsPostCsrfMiddleware',
+    'django.middleware.common.CommonMiddleware', # This should already exist 
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -186,6 +186,8 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static-cdn-local')
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [ 
+    'http://dms.com:8000',
+    'http://dms.com:3000',
     'http://localhost:8000', 
     'http://127.0.0.1:8000',
     'http://localhost:3000', 
