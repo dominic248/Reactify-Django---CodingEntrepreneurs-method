@@ -11,7 +11,8 @@ echo 8. pip freeze
 echo 9. install requirements.txt
 echo 10. rename folder to src
 echo 11. venv activate
-echo 12. venv deactivate
+echo 12. custom venv deactivate
+echo 13. venv deactivate
 echo 40. git init
 echo 41. git log
 echo 42. git remote -v
@@ -82,10 +83,13 @@ set /P N=Enter switch case number:
     echo Done...
     goto :switch-case-end
   :switch-case-N-11
+    venv-v3.8.0\scripts\activate
+    goto :switch-case-end
+  :switch-case-N-12
     set /p venvname=Virtual environment name?
     %venvname%\scripts\activate
     goto :switch-case-end
-  :switch-case-N-12
+  :switch-case-N-13
     set /p venvname=Virtual environment name?
     %venvname%\scripts\deactivate
     goto :switch-case-end
