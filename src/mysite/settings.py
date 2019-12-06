@@ -90,12 +90,11 @@ SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # One month (defined in seconds)
 
 
 MIDDLEWARE = [
-    
+    'mysite.middleware.AddHeadersAPIMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'corsheaders.middleware.CorsPostCsrfMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # 'mysite.middleware.DiscardSessionForAPIMiddleware',
      # Note that this needs to be placed above CommonMiddleware
     'django.middleware.common.CommonMiddleware', # This should already exist 
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -197,6 +196,18 @@ CORS_ORIGIN_WHITELIST = [
     'http://127.0.0.1:3000',
     'http://127.0.0.1.xip.io:3000',
     'http://192.168.0.100:3000'
+]
+CORS_ALLOW_HEADERS = [
+    'cookie',
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
 ]
 
 MEDIA_URL = '/media/'

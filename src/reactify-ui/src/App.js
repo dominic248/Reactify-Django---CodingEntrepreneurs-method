@@ -32,6 +32,7 @@ class App extends React.Component{
     var auth=false;
     var sessioncookie=Cookies.get()
     console.log(sessioncookie.session_id);
+    await console.log(this.state.isAuthenticated)
     if(sessioncookie.session_id!==undefined){
       Cookies.set('session_id', sessioncookie.session_id)
       Cookies.set('sessionid', sessioncookie.session_id)
@@ -39,7 +40,9 @@ class App extends React.Component{
       
       await axios.get('http://dms.com:8000/api/user/current/',{
         headers: {
+            'Accept': 'application/json',
             'Content-Type': 'application/json',
+            // 'XMLHttpRequest.withCredentials': true,
             // 'Cookie': 'sessionid='+sessioncookie.session_id
           }
         },{
@@ -52,14 +55,17 @@ class App extends React.Component{
           auth=true
         })
         .catch(error => {
-          console.log(error.response.data)
+          error=JSON.stringify(error)
+          console.log(error)
+          // auth=true
           auth=false
+          
       })
       await this.setState({isAuthenticated:auth})
     }else{
       await this.setState({isAuthenticated:false})
     }
-    console.log(this.state.isAuthenticated)
+    
     if(!this.state.isAuthenticated){
       await axios.post('http://dms.com:8000/rest-auth/login/',{
           username: 'dms',
@@ -72,7 +78,7 @@ class App extends React.Component{
         withCredentials:true
       })
       .then(response => {
-        // response=JSON.stringify(response)
+        // var responsed=JSON.stringify(response)
         console.log(response);  
         Cookies.set('session_id', response.data.session_key, { expires: 7 });
         Cookies.set('sessionid', response.data.session_key, { expires: 7 })
@@ -86,6 +92,7 @@ class App extends React.Component{
       })
       await this.setState({isAuthenticated:auth})
     }
+    await console.log(this.state.isAuthenticated)
   }
 
   render() {
