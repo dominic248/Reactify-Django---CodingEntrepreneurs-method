@@ -97,7 +97,7 @@ class DeleteAllUnexpiredSessionsForUser(APIView):
 
 class CurrentUserAPIView(APIView):
     def get(self, request):
-        serializer = UserDetailSerializer(request.user)
+        serializer = UserDetailSerializer(request.user,context={'request': request})
         newdict={"sessionkey":request.session.session_key}
         newdict.update(serializer.data)
         return Response(serializer.data)
@@ -120,9 +120,31 @@ class UserListAPIView(ListAPIView):
 class UserRUDView(RetrieveUpdateDestroyAPIView):
     lookup_field= 'username'
     serializer_class=UserRUDSerializer
+    queryset=User
 
-    def get_queryset(self):
-        return User.objects.all()
+    def get(self, request, username, *args, **kwargs):
+        if(username!=request.user.username):
+            return Response({"detail": "Not found."}, status=400)
+        else:
+            serializer = UserRUDSerializer(request.user,context={'request': request})
+            return Response(serializer.data)
+    def update(self, request, username, *args, **kwargs):
+        if(username!=request.user.username):
+            return Response({"detail": "Not found."}, status=400)
+        else:
+            serializer = UserRUDSerializer(request.user,context={'request': request})
+            return Response(serializer.data)
+
+    def destroy(self, request, username, *args, **kwargs):
+        if(username!=request.user.username):
+            return Response({"detail": "Not found."}, status=400)
+        else:
+            serializer = UserRUDSerializer(request.user,context={'request': request})
+            return Response(serializer.data)
+
+    # def get_queryset(self,*args, **kwargs):
+    #     print(*args, **kwargs)
+    #     return User.objects.all()
 
 
 class FollowUnfollowAPIView(APIView):
@@ -135,11 +157,11 @@ class FollowUnfollowAPIView(APIView):
         message = "ERROR"
         toggle_user = get_object_or_404(User, username__iexact=slug)
         if request.user.is_authenticated:
-            print("Hey", request.user, toggle_user)
+            # print("Hey", request.user, toggle_user)
             is_following = Profile.objects.toggle_follow(request.user, toggle_user)
             user_qs = get_object_or_404(User, username=toggle_user)
-            serializer = UserDetailSerializer(user_qs)
-            serializer2 = UserDetailSerializer(request.user)
+            serializer = UserDetailSerializer(user_qs,context={'request': request})
+            serializer2 = UserDetailSerializer(request.user,context={'request': request})
             new_serializer_data = dict(serializer.data)
             new_serializer_data2 = dict(serializer2.data)
             new_serializer_data.update({'following': is_following})
@@ -157,10 +179,10 @@ class FollowRemoveAPIView(APIView):
         message = "ERROR"
         toggle_user = get_object_or_404(User, username__iexact=slug)
         if request.user.is_authenticated:
-            print("Hey", request.user, toggle_user)
+            # print("Hey", request.user, toggle_user)
             is_following = Profile.objects.toggle_remove_follow(request.user, toggle_user)
             user_qs = get_object_or_404(User, username=toggle_user)
-            serializer = UserDetailSerializer(user_qs)
+            serializer = UserDetailSerializer(user_qs,context={'request': request})
             new_serializer_data = dict(serializer.data)
             new_serializer_data.update({'following': is_following})
             new_serializer_data.update({'count': request.user.followed_by.all().count()})

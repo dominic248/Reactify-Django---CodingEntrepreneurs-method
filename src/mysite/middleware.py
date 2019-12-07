@@ -19,10 +19,10 @@ class AddHeadersAPIMiddleware:
         response = self.get_response(request)
         if isinstance(response, Response):
             # response.data['detail'] = 'I have been edited'
-            print(dir(response))
+            # print(dir(response))
             response['Access-Control-Allow-Credentials'] = True
             response['Access-Control-Allow-Origin'] = "*"
-            response['Access-Control-Allow-Headers'] = "Accept, Cookie, Origin, accept-encoding, authorization, content-type, dnt, user-agent, x-csrftoken, x-requested-with"
+            response['Access-Control-Allow-Headers'] = "*"
             # you need to change private attribute `_is_render` 
             # to call render second time
             response._is_rendered = False 

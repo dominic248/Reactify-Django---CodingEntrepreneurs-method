@@ -230,6 +230,7 @@ class UserRUDSerializer(ModelSerializer):
         ]
     
     def update(self, instance, validated_data, *args, **kwargs):
+        # print("Instance is",instance.username)
         profile_data = validated_data.pop("profile")
         profile=Profile.objects.get(user=instance)
         profile.bio=profile_data.get("bio",profile.bio)
@@ -243,6 +244,14 @@ class UserRUDSerializer(ModelSerializer):
         instance.last_name=validated_data.get("last_name",instance.last_name)
         instance.save()
         return instance
+        
+
+    # def destroy(self, instance, validated_data, *args, **kwargs):
+    #     if(self.context['request'].user.username==instance.username):
+    #         print("Instance is",instance.username)
+    #         # instance.delete()
+    #     else:
+    #         return self.context['request'].user
 
     def curruser(self, obj):
         try:

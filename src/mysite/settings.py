@@ -90,7 +90,7 @@ SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # One month (defined in seconds)
 
 
 MIDDLEWARE = [
-    'mysite.middleware.AddHeadersAPIMiddleware',
+    # 'mysite.middleware.AddHeadersAPIMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'corsheaders.middleware.CorsPostCsrfMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -191,11 +191,17 @@ CORS_ORIGIN_WHITELIST = [
     'http://dms.com:8000',
     'http://dms.com:3000',
     'http://localhost:8000', 
-    'http://127.0.0.1:8000',
     'http://localhost:3000', 
+    'http://127.0.0.1:8000',
     'http://127.0.0.1:3000',
-    'http://127.0.0.1.xip.io:3000',
-    'http://192.168.0.100:3000'
+    'http://192.168.0.100:3000',
+    'https://dms.com:8000',
+    'https://dms.com:3000',
+    'https://localhost:8000', 
+    'https://localhost:3000', 
+    'https://127.0.0.1:8000',
+    'https://127.0.0.1:3000',
+    'https://192.168.0.100:3000'
 ]
 CORS_ALLOW_HEADERS = [
     'cookie',
@@ -232,9 +238,9 @@ REST_AUTH_SERIALIZERS = {
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':(
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
+        # 'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
         # 
     ),
     'DEFAULT_PERMISSION_CLASSES': (

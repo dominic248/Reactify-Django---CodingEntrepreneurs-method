@@ -1,0 +1,11 @@
+modal {
+    display: 'flex';
+    align-items: center;
+    justify-content: center;
+}
+  
+paper {
+    background-color: grey;
+    border: 2px solid #000;
+    
+}

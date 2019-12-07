@@ -69,12 +69,13 @@
     "workbox-webpack-plugin": "4.3.1"
   },
   "scripts": {
-    "start": "node scripts/start.js",
+    "start": "node scripts/start.js", 
+    "start//":"set HTTPS=true&&node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "collect": "node scripts/build.js && npm run build-rename && npm run copy-buildfiles && npm run collectstatic",
     "build-rename": "npm run build-rename-js && npm run build-rename-css && npm run build-del",
-    "//": "&& npm run build-rename-logo",
+    "build-rename//": "&& npm run build-rename-logo",
     "build-del": "rmdir /S /Q \"../staticfiles\" && rmdir /S /Q \"../../static-cdn-local\"",
     "build-rename-logo": "renamer --find \"/^(\\w+)\\.[^\\.]+\\.(\\w+)$/\" --replace \"$1.$2\" build/static/media/*",
     "build-rename-js": "npm run build-rename-number-js && npm run build-rename-main-js && npm run build-rename-runtime-main-js",
