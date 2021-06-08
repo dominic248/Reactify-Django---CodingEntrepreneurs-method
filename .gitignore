@@ -2,6 +2,6 @@
 .vscode/
 venv-v3.8.0/
 
-src/db.sqlite3
+
 src/reactify-ui/node_modules/
 src/reactify-ui/build/

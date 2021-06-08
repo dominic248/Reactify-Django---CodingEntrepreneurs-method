@@ -69,8 +69,8 @@
     "workbox-webpack-plugin": "4.3.1"
   },
   "scripts": {
-    "start": "node scripts/start.js", 
-    "start//":"set HTTPS=true&&node scripts/start.js",
+    "start": "node scripts/start.js",
+    "startssl": "set HTTPS=true&&node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "collect": "node scripts/build.js && npm run build-rename && npm run copy-buildfiles && npm run collectstatic",

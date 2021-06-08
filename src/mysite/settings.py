@@ -54,9 +54,10 @@ INSTALLED_APPS = [
 
 SITE_ID = 0
 
-# SECURE_SSL_REDIRECT = False
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
+SECURE_SSL_REDIRECT = True
+# SESSION_EXPIRE_AT_BROWSER_CLOSE=True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 # SESSION_SAVE_EVERY_REQUEST =True
 SESSION_COOKIE_AGE=1209
 SESSION_CACHE_ALIAS = "default"
@@ -90,9 +91,7 @@ SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # One month (defined in seconds)
 
 
 MIDDLEWARE = [
-    # 'mysite.middleware.AddHeadersAPIMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'corsheaders.middleware.CorsPostCsrfMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
      # Note that this needs to be placed above CommonMiddleware
@@ -100,6 +99,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'mysite.middleware.AddHeadersAPIMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -186,35 +186,36 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static-cdn-local')
 
 # CORS_URLS_REGEX = r'^/api.*'
 CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_WHITELIST = [ 
-    'http://dms.com:8000',
-    'http://dms.com:3000',
-    'http://localhost:8000', 
-    'http://localhost:3000', 
-    'http://127.0.0.1:8000',
-    'http://127.0.0.1:3000',
-    'http://192.168.0.100:3000',
-    'https://dms.com:8000',
-    'https://dms.com:3000',
-    'https://localhost:8000', 
-    'https://localhost:3000', 
-    'https://127.0.0.1:8000',
-    'https://127.0.0.1:3000',
-    'https://192.168.0.100:3000'
-]
-CORS_ALLOW_HEADERS = [
-    'cookie',
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-]
+CORS_ALLOW_CREDENTIALS = False 
+# CORS_ORIGIN_WHITELIST = [ 
+#     'http://dms.com:8000',
+#     'http://dms.com:3000',
+#     'http://localhost:8000', 
+#     'http://localhost:3000', 
+#     'http://127.0.0.1:8000',
+#     'http://127.0.0.1:3000',
+#     'http://192.168.0.100:3000',
+#     'https://dms.com:8000',
+#     'https://dms.com:3000',
+#     'https://localhost:8000', 
+#     'https://localhost:3000', 
+#     'https://127.0.0.1:8000',
+#     'https://127.0.0.1:3000',
+#     'https://192.168.0.100:3000'
+# ]
+# CORS_ALLOW_HEADERS = [
+  
+#     'cookie',
+#     'accept',
+#     'accept-encoding',
+#     'authorization',
+#     'content-type',
+#     'dnt',
+#     'origin',
+#     'user-agent',
+#     'x-csrftoken',
+#     'x-requested-with',
+# ]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
@@ -244,8 +245,8 @@ REST_FRAMEWORK = {
         # 
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        # 'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     )
 }
 

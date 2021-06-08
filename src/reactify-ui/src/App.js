@@ -50,7 +50,7 @@ class App extends React.Component{
     if(sessioncookie.session_id!==undefined){
       Cookies.set('session_id', sessioncookie.session_id)
       Cookies.set('sessionid', sessioncookie.session_id)
-      await axios.get('http://dms.com:8000/api/user/current/',{
+      await axios.get('http://localhost:8000/api/user/current/details/',{
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ class App extends React.Component{
   }
   async initLogin(username,password,rememberme){
     var sessioncookie=Cookies.get()
-    await axios.post('http://dms.com:8000/rest-auth/login/',{
+    await axios.post('http://localhost:8000/rest-auth/login/',{
           username: username,
           password: password
       },{
